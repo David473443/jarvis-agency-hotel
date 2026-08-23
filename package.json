@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port ${PORT:-4173}",
-    "start": "python3 serve.py"
+    "start": "node serve.js"
   },
   "dependencies": {
     "react": "^18.3.1",
