@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import { AtTheHorizon } from "@threeui/package-components/AtTheHorizon";
-import { CloudField } from "@threeui/package-components/CloudField";
-import { Gallery } from "@threeui/package-components/Gallery";
-import { EditorialIntroSection } from "@threeui/package-components/EditorialIntroSection";
-import { FloatingDotsCta } from "@threeui/package-components/FloatingDotsCta";
-import { NewsletterFooterSection } from "@threeui/package-components/NewsletterFooterSection";
-import { BrandOrbs } from "@threeui/package-components/BrandOrbs";
+import JarvisScene from "./JarvisScene.jsx";
 
 // One config file per client — swap this import to re-skin the whole demo.
 import config from "../client.config.js";
@@ -86,7 +80,7 @@ export default function App() {
         }}
       >
         <div className="hero__scene">
-          <AtTheHorizon />
+          <JarvisScene density={1.1} />
         </div>
         <div className="hero__copy">
           <p className="hero__eyebrow">{TAGLINE}</p>
@@ -109,14 +103,14 @@ export default function App() {
       </header>
 
       <section className="band">
-        <CloudField />
+        <JarvisScene density={0.8} />
       </section>
 
       <section id="story" className="section section--split">
         <div className="split__text">
           <h2 className="section__title">Where the city meets the river</h2>
           <p>
-            {CLIENT} sits in {LOCATION.split(",")[0]}, minutes from the Port
+            {CLIENT} sits in {LOCATION.split(", ")[0]}, minutes from the Port
             Harcourt business district and the airport road. We designed it for
             people who travel for work but still want a place that feels like a
             retreat — quiet rooms, fast Wi-Fi, and a pool that catches the sunset
@@ -128,7 +122,7 @@ export default function App() {
           </p>
         </div>
         <div className="split__scene">
-          <EditorialIntroSection />
+          <JarvisScene density={0.7} />
         </div>
       </section>
 
@@ -168,10 +162,6 @@ export default function App() {
             />
           ))}
         </div>
-
-        <div className="rooms__gallery">
-          <Gallery />
-        </div>
       </section>
 
       <section id="amenities" className="section">
@@ -184,7 +174,7 @@ export default function App() {
           ))}
         </div>
         <div className="band band--short">
-          <BrandOrbs />
+          <JarvisScene density={0.6} />
         </div>
       </section>
 
@@ -255,7 +245,7 @@ export default function App() {
             )}
           </form>
           <div className="book__scene">
-            <FloatingDotsCta />
+            <JarvisScene density={0.5} />
           </div>
         </div>
         <p className="book__contact">
@@ -263,14 +253,13 @@ export default function App() {
         </p>
       </section>
 
-      <NewsletterFooterSection />
       <footer className="footer">
         <span>
           © {new Date().getFullYear()} {CLIENT}
         </span>
         <span>{LOCATION}</span>
         <span>📞 {PHONE}</span>
-        <span>Built with ThreeUI Community</span>
+        <span>Built with J.A.R.V.I.S</span>
       </footer>
     </div>
   );
