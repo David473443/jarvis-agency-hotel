@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>AIDEN — Chief of Staff</title>
+<style>
+  :root { --bg:#06070a; --fg:#eef1f6; --accent:#5eead4; --accent2:#818cf8; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  .wrap { min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; padding:24px; }
+  .orb { width:160px; height:160px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--accent), var(--accent2) 70%, #1b2240);
+    box-shadow:0 0 60px rgba(94,234,212,.35); transition:.3s; }
+  .orb.live { animation:pulse 1.6s ease-in-out infinite; box-shadow:0 0 90px rgba(129,140,248,.6); }
+  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+  h1 { font-size:20px; letter-spacing:2px; margin:0; font-weight:700; }
+  .sub { color:#9aa3b2; font-size:14px; margin-top:-16px; }
+  button { background:var(--accent); color:#04130f; border:0; border-radius:999px;
+    padding:16px 34px; font-size:16px; font-weight:700; cursor:pointer; }
+  button:active { transform:scale(.97); }
+  button.off { background:#222a38; color:#9aa3b2; }
+  .status { font-size:13px; color:#9aa3b2; min-height:18px; text-align:center; max-width:320px; }
+  .transcript { width:min(420px,92vw); height:160px; overflow-y:auto; background:#0e1118;
+    border:1px solid #1c2230; border-radius:12px; padding:12px; font-size:14px; line-height:1.5; }
+  .transcript p { margin:6px 0; } .transcript .u { color:var(--accent); }
+  .transcript .a { color:var(--fg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="orb" id="orb"></div>
+  <h1>AIDEN</h1>
+  <div class="sub">Your AI Chief of Staff</div>
+  <button id="btn">🎙️ Start talking</button>
+  <div class="status" id="status">Tap to talk to AIDEN.</div>
+  <div class="transcript" id="log"></div>
+</div>
+
+<!-- Vapi Web SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.js"></script>
+<script>
+  const VAPI_PUBLIC_KEY = "764ca54c-2046-4ef6-9484-642270d2a805"; // your Vapi key (also used as public/client key)
+  const ASSISTANT_ID = "6e3d7e8a-e68b-4f0c-952e-a168425757bc";
+  const orb = document.getElementById("orb");
+  const btn = document.getElementById("btn");
+  const status = document.getElementById("status");
+  const log = document.getElementById("log");
+
+  let vapi = null, connected = false;
+
+  function addLine(who, text){
+    const p = document.createElement("p");
+    p.className = who === "you" ? "u" : "a";
+    p.textContent = (who === "you" ? "You: " : "AIDEN: ") + text;
+    log.appendChild(p); log.scrollTop = log.scrollHeight;
+  }
+
+  async function start(){
+    if(!vapi){ vapi = new Vapi(VAPI_PUBLIC_KEY); wire(); }
+    status.textContent = "Connecting…";
+    try { await vapi.start(ASSISTANT_ID); }
+    catch(e){ status.textContent = "Error: " + e.message; }
+  }
+  function stop(){ if(vapi) vapi.stop(); }
+
+  function wire(){
+    vapi.on("call-start", () => { connected=true; orb.classList.add("live");
+      btn.textContent="⏹ Stop"; status.textContent="AIDEN is listening…"; });
+    vapi.on("call-end", () => { connected=false; orb.classList.remove("live");
+      btn.textContent="🎙️ Start talking"; status.textContent="Call ended."; });
+    vapi.on("speech-start", () => orb.classList.add("live"));
+    vapi.on("speech-end", () => orb.classList.remove("live"));
+    vapi.on("transcript", (t) => { if(t.transcript) addLine(t.role==="user"?"you":"a", t.transcript); });
+    vapi.on("error", (e) => { status.textContent = "Error: " + (e?.message||e); });
+  }
+
+  btn.addEventListener("click", () => { connected ? stop() : start(); });
+</script>
+</body>
+</html>

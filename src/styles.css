@@ -16,7 +16,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
-.site { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.site {
+  max-width: 1200px; margin: 0 auto; padding: 0 20px;
+  /* Config-driven brand colors (set as inline custom properties on .site) */
+  --bg: var(--brand-bg, #06070a);
+  --fg: var(--brand-text, #eef1f6);
+  --accent: var(--brand-accent, #5eead4);
+  --accent2: var(--brand-accent2, #818cf8);
+  --primary: var(--brand-primary, #5eead4);
+}
 
 /* NAV */
 .nav {
@@ -104,6 +112,10 @@ a { color: inherit; text-decoration: none; }
 .room__price small { color: var(--muted); font-weight: 400; }
 .room__body p { color: var(--muted); font-size: 14px; line-height: 1.5; }
 .rooms__gallery { height: 50vh; margin-top: 24px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+
+/* Photo strip driven by config.roomImages[] */
+.rooms__tour { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
+.rooms__tour-img { height: 140px; border-radius: 12px; background-size: cover; background-position: center; background-color: #11161f; border: 1px solid var(--border); }
 
 /* AMENITIES */
 .amenities { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
